@@ -1,0 +1,44 @@
+﻿<Window x:Class="MangerTest.Pruefung"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MangerTest.ViewModel"
+        mc:Ignorable="d"
+        Title="Pruefung" Height="600" Width="800">
+    <Window.DataContext>
+        <local:PruefungViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <!-- Hier wird die TextBox skaliert -->
+        </Grid.ColumnDefinitions>
+
+        <Label Content="aktuelles Gewicht:" Grid.Column="0" VerticalAlignment="Top" Margin="0,84,695,0" Grid.ColumnSpan="2"/>
+
+        <TextBox x:Name="txtGewicht" 
+                 Grid.Column="1" 
+                 HorizontalAlignment="Left" 
+                 Margin="125,89,0,0" 
+                 TextWrapping="Wrap" 
+                 Text="{Binding GewichtVM.Gewicht, Mode=OneWay}" 
+                 VerticalAlignment="Top" 
+                 Width="94"/>
+
+        <TextBox x:Name="txtGewZiel"
+         Grid.Column="1"
+         Text="{Binding GewichtZielVM.Wert, Mode=OneWay}"
+         HorizontalAlignment="Left"
+         Margin="368,88,0,0"
+         TextWrapping="Wrap"
+         VerticalAlignment="Top"
+         Width="94"/>
+
+        <Label x:Name="label" Grid.Column="1" Content="Gewicht Ziel:" HorizontalAlignment="Left" Margin="267,85,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtGewDiff" Grid.Column="1" HorizontalAlignment="Left" Margin="636,88,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="94"/>
+        <Label x:Name="label1" Grid.Column="1" Content="Differenz:" HorizontalAlignment="Left" Margin="549,84,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnErgebnis" Grid.Column="1" Content="Ergebnis" HorizontalAlignment="Left" Margin="662,10,0,0" VerticalAlignment="Top" Click="btnErgebnis_Click"/>
+    </Grid>
+</Window>

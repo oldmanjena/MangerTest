@@ -1,0 +1,69 @@
+﻿<Window x:Class="MangerTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
+        xmlns:local="clr-namespace:MangerTest"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        Style="{StaticResource {x:Type Window}}">
+
+    <StackPanel Margin="10">
+        <Menu Width="757" Margin="10"
+          HorizontalAlignment="Left" Background="White"
+          BorderBrush="Blue" BorderThickness="1">
+
+            <MenuItem Header="Körper">
+                <MenuItem Header="Blutdruck" IsCheckable="true" Click="Blutdruck_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/icons/gesund.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="Messwerte Blutdruck"/>
+                    <MenuItem Header="Morgens"/>
+                    <MenuItem Header="Abends"/>
+                </MenuItem>
+                <MenuItem Header="_SUBMENU2" IsCheckable="true"/>
+                <MenuItem Header="_SUBMENU3" IsCheckable="true"/>
+            </MenuItem>
+
+            <MenuItem Header="Auswertungen">
+                <MenuItem Header="Blutdruck"/>
+                <MenuItem Header="Prüfen" Click="Pruef_Click" IsCheckable="True"/>
+                <Separator/>
+                <MenuItem Header="Cut"/>
+                <MenuItem Header="Copy"/>
+                <MenuItem Header="Paste"/>
+            </MenuItem>
+
+            <MenuItem Header="Tabellen">
+                <MenuItem Header="Blutdruck" Click="Auswertung_Click" IsCheckable="True"/>
+                <MenuItem Header="Essen" Click="EinEssen_Click" IsCheckable="True"/>
+                <Separator/>
+                <MenuItem Header="Verschiedenes" Click="Verschieden_Click" IsCheckable="True"/>
+                <MenuItem Header="Copy"/>
+                <MenuItem Header="Paste"/>
+            </MenuItem>
+
+            <MenuItem Header="Training">
+                <MenuItem Header="Blutdruck" Click="Auswertung_Click" IsCheckable="True"/>
+                <MenuItem Header="Training Eintragen" Click="TraiEin_Click" IsCheckable="True"/>
+                <Separator/>
+                <MenuItem Header="Cut"/>
+                <MenuItem Header="Copy"/>
+                <MenuItem Header="Paste"/>
+            </MenuItem>
+
+
+            <MenuItem Header="Suchen">
+                <MenuItem Header="Blutdruck Suchen" Click="SuBlut_Click" IsCheckable="True"/>
+                <MenuItem Header="Redo"/>
+                <Separator/>
+                <MenuItem Header="Cut"/>
+                <MenuItem Header="Copy"/>
+                <MenuItem Header="Paste"/>
+            </MenuItem>
+        </Menu>
+
+    </StackPanel>
+
+</Window>

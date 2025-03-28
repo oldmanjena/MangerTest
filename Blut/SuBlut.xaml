@@ -1,0 +1,14 @@
+﻿<Window x:Class="MangerTest.Blut.SuBlut"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="SuBlut" Height="450" Width="800">
+    <Grid>
+        <DataGrid x:Name="dtgSuche" d:ItemsSource="{d:SampleData ItemCount=5}" Height="200" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="txtSuche" HorizontalAlignment="Left" Margin="24,64,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="txtSuche_TextChanged"/>
+
+
+    </Grid>
+</Window>

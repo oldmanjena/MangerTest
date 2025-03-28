@@ -1,0 +1,13 @@
+﻿<Window x:Class="MangerTest.Essen.EinEssen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MangerTest"
+        xmlns:templates="clr-namespace:MangerTest.Templates"
+        mc:Ignorable="d"
+        Title="EinEssen" Height="450" Width="800">
+    <Grid>
+        <templates:GridTemplate4x4 DataContext="{Binding GridViewModel}"/>
+    </Grid>
+</Window>
