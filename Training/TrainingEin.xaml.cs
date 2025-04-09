@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Calendar = System.Globalization.Calendar;
 
 namespace MangerTest.Training
 {
@@ -24,11 +26,20 @@ namespace MangerTest.Training
         public TrainingEin()
         {
             InitializeComponent();
-            DataContext = new TrainingsViewModel();
+            DataContext = new CombinedViewModel();
             Cb_Groesse(); // Daten in die ComboBox laden
-            
+            //UpdateKalenderwoche(DateTime.Today);
+
+
         }
 
+        public class CombinedViewModel
+        {
+            public TrainingsViewModel TrainingsVM { get; set; } = new();
+            public TimePickerViewModel TimePickerVM { get; set; } = new();
+
+           
+        }
 
         private void Cb_Groesse()
         {
@@ -58,6 +69,21 @@ namespace MangerTest.Training
                     MessageBox.Show("Fehler beim Laden der Daten: " + ex.Message);
                 }
             }
+        }
+
+
+        private void UpdateKalenderwoche(DateTime datum)
+        {
+            // Kultur verwenden, z. B. Deutsch (ISO 8601)
+            CultureInfo ci = CultureInfo.CurrentCulture;
+            Calendar cal = ci.Calendar;
+
+            // Kalenderwoche nach ISO 8601 (erste Woche mit mindestens 4 Tagen)
+            CalendarWeekRule rule = CalendarWeekRule.FirstFourDayWeek;
+            DayOfWeek firstDay = DayOfWeek.Monday;
+
+            int kw = cal.GetWeekOfYear(datum, rule, firstDay);
+            txtKw.Text = $"KW {kw}";
         }
 
     }

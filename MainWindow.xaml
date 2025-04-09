@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
         xmlns:local="clr-namespace:MangerTest"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Start" Height="450" Width="800"
         Style="{StaticResource {x:Type Window}}">
+    
 
     <StackPanel Margin="10">
         <Menu Width="757" Margin="10"
           HorizontalAlignment="Left" Background="White"
-          BorderBrush="Blue" BorderThickness="1">
+          BorderBrush="Blue" BorderThickness="2">
 
             <MenuItem Header="Körper">
-                <MenuItem Header="Blutdruck" IsCheckable="true" Click="Blutdruck_Click">
+                <MenuItem Header="Blutdruck">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/icons/gesund.png" Width="16" Height="16"/>
                     </MenuItem.Icon>
@@ -25,7 +26,8 @@
                 <MenuItem Header="_SUBMENU2" IsCheckable="true"/>
                 <MenuItem Header="_SUBMENU3" IsCheckable="true"/>
             </MenuItem>
-
+            
+            
             <MenuItem Header="Auswertungen">
                 <MenuItem Header="Blutdruck"/>
                 <MenuItem Header="Prüfen" Click="Pruef_Click" IsCheckable="True"/>
@@ -44,11 +46,11 @@
                 <MenuItem Header="Paste"/>
             </MenuItem>
 
-            <MenuItem Header="Training">
-                <MenuItem Header="Blutdruck" Click="Auswertung_Click" IsCheckable="True"/>
-                <MenuItem Header="Training Eintragen" Click="TraiEin_Click" IsCheckable="True"/>
+            <MenuItem Header="Eintragen">
+                <MenuItem Header="Blutdruck Werte" Click="Auswertung_Click" IsCheckable="True"/>
+                <MenuItem x:Name="Cardio_Training" Header="Cardio Eintragen" Click="TraiEin_Click" IsCheckable="True"/>
                 <Separator/>
-                <MenuItem Header="Cut"/>
+                <MenuItem x:Name="MuskelTrain" Header="Muskel Training" Click="Muskeln_Click" IsCheckable="True"/>
                 <MenuItem Header="Copy"/>
                 <MenuItem Header="Paste"/>
             </MenuItem>

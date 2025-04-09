@@ -1,5 +1,6 @@
 ﻿using ManagerTest.Views;
 using MangerTest.Anzeigen;
+using MangerTest.Blut;
 using MangerTest.Essen;
 using MangerTest.Training;
 using System.Windows;
@@ -32,7 +33,7 @@ public partial class MainWindow : Window
 
     private void Blutdruck_Click(object sender, RoutedEventArgs e)
     {
-        Blutdruck Druck = new Blutdruck();
+        ErfassBlut Druck = new ErfassBlut();
         Druck.Show();
     }
 
@@ -71,6 +72,12 @@ public partial class MainWindow : Window
     {
         Pruefung PR = new Pruefung();
         PR.Show();
+    }
+
+    private void Muskeln_Click(object sender, RoutedEventArgs e)
+    {
+        MuskelEin MSK = new MuskelEin();
+        MSK.Show();
     }
 }
 
