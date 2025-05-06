@@ -1,0 +1,36 @@
+﻿<Window x:Class="MangerTest.Auswertungen.WochenGruppen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MangerTest.Auswertungen"
+        xmlns:vm="clr-namespace:MangerTest.ViewModel"
+        mc:Ignorable="d"
+        Title="WochenGruppen" Height="450" Width="800"
+        Style="{StaticResource {x:Type Window}}">
+
+             <Window.DataContext>
+              <vm:WochenplanViewModel/>
+            </Window.DataContext>
+
+    <StackPanel Margin="10">
+        <Button Content="PDF exportieren"
+        Width="150"
+        Command="{Binding ExportierePdfCommand}" />
+        <ComboBox ItemsSource="{Binding Muskelgruppen}"
+                  SelectedItem="{Binding AusgewaehlteMuskelgruppe}"
+                  Width="200" RenderTransformOrigin="-0.6,-0.72" HorizontalAlignment="Left"/>
+
+        <DataGrid ItemsSource="{Binding Wochenplan}" AutoGenerateColumns="False" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Montag" Binding="{Binding Montag}" />
+                <DataGridTextColumn Header="Dienstag" Binding="{Binding Dienstag}" />
+                <DataGridTextColumn Header="Mittwoch" Binding="{Binding Mittwoch}" />
+                <DataGridTextColumn Header="Donnerstag" Binding="{Binding Donnerstag}" />
+                <DataGridTextColumn Header="Freitag" Binding="{Binding Freitag}" />
+                <DataGridTextColumn Header="Samstag" Binding="{Binding Samstag}" />
+                <DataGridTextColumn Header="Sonntag" Binding="{Binding Sonntag}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</Window>

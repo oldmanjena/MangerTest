@@ -1,0 +1,142 @@
+﻿<Window x:Class="MangerTest.Schmerz.schmerzaufzeichnungen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MangerTest.Schmerz"    
+        xmlns:bool="clr-namespace:MangerTest.Converter" 
+        mc:Ignorable="d"        
+        Title="Schmerzaufzeichnungen" Height="700" Width="1000"
+        Style="{StaticResource {x:Type Window}}">
+
+    <Window.Resources>
+        <bool:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <bool:FlowDocumentToStringConverter x:Key="FlowDocumentToStringConverter" />
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Kopfbereich -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnEintragen" Content="Eintragen" Width="100" Margin="0,0,10,0" Command="{Binding EintragCommand}" Cursor="Hand"/>
+            <Button x:Name="btnEnde" Content="Beenden" Width="100" Click="btnEnde_Click"/>
+        </StackPanel>
+
+        <!-- Datum und Uhrzeit -->
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,10,0,0">
+            <StackPanel>
+                <TextBlock Text="Aktuelles Datum:" FontWeight="Bold"/>
+                <DatePicker x:Name="dtpHeute" Width="120"/>
+            </StackPanel>
+            <StackPanel Margin="20,0,0,0">
+                <TextBlock Text="Uhrzeit:" FontWeight="Bold"/>
+                <TextBox x:Name="txtZeit" Width="80"/>
+            </StackPanel>
+            <CheckBox x:Name="chkMedi" 
+                      Content="Medikamentation"
+                      Margin="20,20,0,0" Checked="chkMedi_Checked" Unchecked="chkMedi_Checked"/>
+        </StackPanel>
+
+        <!-- Medikamenten Panel -->
+        <StackPanel x:Name="pnMedikamente" Orientation="Vertical" Grid.Row="2" Margin="0,10,0,0" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <ComboBox x:Name="txtMeta"
+                          ItemsSource="{Binding MedikamentenListe}"
+                          SelectedItem="{Binding MedikamentA, Mode=TwoWay}"
+                          Width="150" 
+                          Margin="0,0,10,0" />
+                <xctk:IntegerUpDown 
+                    x:Name="numMeta" Width="100"
+                    Minimum="0"
+                        Maximum="100"
+                        Value="{Binding MedikamentAAnzahl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Increment="1"
+                    />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <ComboBox x:Name="txtTili"
+                          ItemsSource="{Binding MedikamentenListe}"
+                           SelectedItem="{Binding MedikamentB, Mode=TwoWay}"
+                          Width="150" Margin="0,0,10,0"/>
+                <xctk:IntegerUpDown 
+                    x:Name="numTili" Width="100"
+                   Minimum="0"
+                        Maximum="100"
+                        Value="{Binding MedikamentBAnzahl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Increment="1"
+                    />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Schmerzbereiche und Lokalisierung -->
+        <StackPanel Grid.Row="3" Margin="0,10,0,0">
+            <TextBlock Text="Schmerzbereich:" FontWeight="Bold"/>
+            <ComboBox x:Name="cmbBereich" Width="200" 
+                      ItemsSource="{Binding Bereiche}"
+                      SelectedItem="{Binding AusgewaehlterBereich, Mode=TwoWay}"
+                      />
+
+            <WrapPanel Margin="0,10,0,0">
+                <StackPanel>
+                    <TextBlock Text="Beine:"/>
+                    <ComboBox x:Name="cmbBeine" Width="120"
+                              ItemsSource="{Binding BeinBereiche}" 
+                              SelectedIndex="1" 
+                              SelectedItem="{Binding AusgewaehltesBein}"
+                              IsEnabled="{Binding IstBeinAktiv}"
+                              />
+                </StackPanel>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="Knie:"/>
+                    <ComboBox x:Name="cmbKnie" 
+                              ItemsSource="{Binding Kniebereich}"
+                              SelectedItem="{Binding AusgewaehltesKnie, Mode=TwoWay}"
+                              IsEnabled="{Binding IstKnieAktiv}" 
+                              Width="120"/>
+                </StackPanel>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="Fuß:"/>
+                    <ComboBox x:Name="cmbFuss" Width="120"
+                              ItemsSource="{Binding FussBereiche}"
+                              SelectedItem="{Binding AusgewaehlterFuss, Mode=TwoWay}"
+                              IsEnabled="{Binding IstFussAktiv}"
+                              />
+                </StackPanel>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="Bauch:"/>
+                    <ComboBox x:Name="cmbBauch" 
+                              Width="120"
+                               ItemsSource="{Binding Bauchbereich}" 
+                               SelectedItem="{Binding AusgewaehlterBauch}"
+                               IsEnabled="{Binding IstBauchAktiv}" 
+                              />
+                </StackPanel>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="Rücken:"/>
+                    <ComboBox x:Name="cmbRuecken" Width="120"
+                              ItemsSource="{Binding RueckenBereiche}" 
+                              SelectedItem="{Binding AusgewaehlterRuecken}"
+                              IsEnabled="{Binding IstRueckenAktiv}"
+                              />
+                </StackPanel>
+            </WrapPanel>
+
+            <!-- Details -->
+            <CheckBox x:Name="chkDetail" Content="Mehr Details" Margin="0,10,0,0" Checked="chkDetail_Checked" Unchecked="chkDetail_Checked"/>
+            <Border x:Name="pnDetail" Background="LightCoral" Margin="0,5,0,0" Height="150" Visibility="Collapsed"/>
+
+            <!-- Beschreibung -->
+            <TextBlock Text="Welche Schmerzen:" Margin="0,10,0,5" FontWeight="Bold"/>
+            <RichTextBox x:Name="rtxSchmerz" 
+                       
+                        Height="100"/>
+        </StackPanel>
+    </Grid>
+</Window>

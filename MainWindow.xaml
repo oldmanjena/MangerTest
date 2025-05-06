@@ -14,7 +14,7 @@
           HorizontalAlignment="Left" Background="White"
           BorderBrush="Blue" BorderThickness="2">
 
-            <MenuItem Header="Körper">
+            <MenuItem Header="Administration">
                 <MenuItem Header="Blutdruck">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/icons/gesund.png" Width="16" Height="16"/>
@@ -32,7 +32,7 @@
                 <MenuItem Header="Blutdruck"/>
                 <MenuItem Header="Prüfen" Click="Pruef_Click" IsCheckable="True"/>
                 <Separator/>
-                <MenuItem Header="Cut"/>
+                <MenuItem Header="Wochen Muskeln" Click="Woche_Click" IsCheckable="True"/>
                 <MenuItem Header="Copy"/>
                 <MenuItem Header="Paste"/>
             </MenuItem>
@@ -47,12 +47,12 @@
             </MenuItem>
 
             <MenuItem Header="Eintragen">
-                <MenuItem Header="Blutdruck Werte" Click="Auswertung_Click" IsCheckable="True"/>
+                <MenuItem Header="Blutdruck Werte" Click="Blutdruck_Click" IsCheckable="True"/>
                 <MenuItem x:Name="Cardio_Training" Header="Cardio Eintragen" Click="TraiEin_Click" IsCheckable="True"/>
                 <Separator/>
                 <MenuItem x:Name="MuskelTrain" Header="Muskel Training" Click="Muskeln_Click" IsCheckable="True"/>
-                <MenuItem Header="Copy"/>
-                <MenuItem Header="Paste"/>
+                <MenuItem x:Name="Schmerz" Header="Schmerzen" Click="Schmerz_Click" IsCheckable="True"/>
+                <MenuItem x:Name="Gewicht" Header="Körperhewicht" Click="Koerpergewicht_Click" IsCheckable="True"/>
             </MenuItem>
 
 
@@ -64,7 +64,18 @@
                 <MenuItem Header="Copy"/>
                 <MenuItem Header="Paste"/>
             </MenuItem>
+
+            <MenuItem Header="Planung">
+                <MenuItem Header="Training" Click="Training_Click" IsCheckable="True"/>
+                <MenuItem Header="Pan Update" Click="PlanUpdate_Click" IsCheckable="True"/>
+                <Separator/>
+                <MenuItem Header="Ziele" Click="ZielEin_Click" IsCheckable="True"/>
+                <MenuItem Header="Copy"/>
+                <MenuItem Header="Paste"/>
+            </MenuItem>
         </Menu>
+        
+        
 
     </StackPanel>
 

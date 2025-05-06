@@ -1,22 +1,14 @@
 ﻿using MangerTest.ViewModel;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel; // Für INotifyPropertyChanged
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MangerTest.Training
 {
@@ -29,6 +21,8 @@ namespace MangerTest.Training
         private Dictionary<string, List<string>> ZielDict = new Dictionary<string, List<string>>();
         public ObservableCollection<TrainingEntry> TrainingEntries { get; set; } = new ObservableCollection<TrainingEntry>();
         private CollectionViewSource _letzteTrainingData;
+
+        public ObservableCollection<string> Muskelgruppen { get; set; }
         public CollectionViewSource LetzteTrainingData
         {
             get { return _letzteTrainingData; }
@@ -50,44 +44,67 @@ namespace MangerTest.Training
         public MuskelEin()
         {
             InitializeComponent();
-            DataContext = new TrainartViewModel();
-            DataContext = new AktuellesDatumViewModel(); // Hier den neuen Namen verwenden
+            // DataContext = new TrainartViewModel();
+            //  DataContext = new AktuellesDatumViewModel(); // Hier den neuen Namen verwenden
+            // DataContext = new MuskelViewModel(); // Direkt setzen
+            this.DataContext = new MuskelViewModel();
+           // Debug.WriteLine("DataContext: " + this.DataContext);
+
             FillComboBox(); // Rufe die Methode beim Initialisieren des Fensters auf
+             Muskelgruppen = new ObservableCollection<string>(ZielDict.Keys);
+            if (DataContext is MuskelViewModel viewModel)
+            {
+                Debug.WriteLine("MuskelViewModel wurde korrekt zugewiesen");
+
+                // Die ComboBox ItemsSource binden
+               // cmbGruppe.ItemsSource = viewModel.Muskelgruppe;
+
+                // Optional: Kombobox auf das erste Element setzen
+                cmbGruppe.SelectedIndex = 0;
+            }
+            else
+            {
+                Debug.WriteLine("DataContext konnte nicht zugewiesen werden");
+            }
+            Debug.WriteLine("MuskelViewModel initialisiert, Gruppen: " + string.Join(", ", Muskelgruppen));
 
             // Fülle das Dictionary mit den Gruppen und den zugehörigen Übungen
-            ZielDict.Add("Krank", new List<string> { "krank" });
-            ZielDict.Add("Rücken", new List<string> { "Latissimus", "Trapezius", "unterer Rücken" });
-            ZielDict.Add("Beine", new List<string> { "Quardrizeps", "Harnstrings" });
-            ZielDict.Add("Brust", new List<string> { "Obere Brust", "Mittlere Brust" });
-            ZielDict.Add("Bizeps", new List<string> { "gesamter Bizeps" });
-            ZielDict.Add("Trizeps", new List<string> { "gesamter Trizeps" });
-            ZielDict.Add("Schulter", new List<string> { "vordere", "mittlere", "hintere" });
-            ZielDict.Add("Bauch", new List<string> { "oberer", "geamter", "unterer", "schräger" });
-            ZielDict.Add("Unterarm", new List<string> { "gesamter" });
-            ZielDict.Add("Ganzkörper", new List<string> { "gesamter" });
+            ZielDict = new Dictionary<string, List<string>>
+                {
+                    { "Krank", new List<string> { "krank" } },
+                    { "Rücken", new List<string> { "Latissimus", "Trapezius", "unterer Rücken" } },
+                    { "Beine", new List<string> { "Quadrizeps", "Harnstrings" } },
+                    { "Brust", new List<string> { "Obere Brust", "Mittlere Brust" } },
+                    { "Bizeps", new List<string> { "gesamter Bizeps" } },
+                    { "Trizeps", new List<string> { "gesamter Trizeps" } },
+                    { "Schulter", new List<string> { "vordere", "mittlere", "hintere" } },
+                    { "Bauch", new List<string> { "oberer", "gesamter", "unterer", "schräger" } },
+                    { "Unterarm", new List<string> { "gesamter" } },
+                    { "Ganzkörper", new List<string> { "gesamter" } }
+                };
 
-            // Füge die Gruppen in die ComboBox cmbGruppe hinzu
-            foreach (var gruppe in ZielDict.Keys)
-            {
-                cmbGruppe.Items.Add(gruppe);
-            }
+            Debug.WriteLine("MuskelViewModel initialisiert, Gruppen: " + string.Join(", ", Muskelgruppen));
 
             // Combobox auf 0 setzen
             cmbGruppe.SelectedIndex = 0;
+
             dtgUeber.AutoGeneratingColumn += DtgUeber_AutoGeneratingColumn;
             Daten();
             dtgUeber.ItemsSource = TrainingEntries;
-            cmbArt.ItemsSource = new[] { "Definition", "Masseaufbau", "Diät" };
-            cmbArt.SelectedIndex = 0; // Wählt "Definition" aus
+            cmbArt.ItemsSource = new[] { "Definition", "Masseaufbau", "Diät", "Normal" };
+            cmbArt.SelectedIndex = 3; // Wählt "Definition" aus
+            cmbTechnik.ItemsSource = new[] { "Aufwärmen", "Arbeitssatz", "Cool Down" };
+            cmbTechnik.SelectedIndex = 0; // Wählt "Definition" aus
         }
-
+        
         private void FillComboBox()
         {
-            cmbtrainingsnummer.Items.Clear(); // ComboBox leeren, um Duplikate zu vermeiden
+            var viewModel = (MuskelViewModel)this.DataContext;
+            viewModel.Trainingsnummern = new ObservableCollection<string>(); // Initialisiere die ObservableCollection
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string query = "SELECT * FROM Planung WHERE erledigt < 1"; // Abfrage, um eindeutige Einträge aus der Spalte "Plan_Nr" zu erhalten
+                string query = "SELECT * FROM Planung WHERE erledigt < 1";
                 SqlCommand command = new SqlCommand(query, connection);
 
                 try
@@ -97,7 +114,7 @@ namespace MangerTest.Training
 
                     while (reader.Read())
                     {
-                        cmbtrainingsnummer.Items.Add(reader["Plan_Nr"].ToString()); // Eindeutige Einträge zur ComboBox hinzufügen
+                        viewModel.Trainingsnummern.Add(reader["Plan_Nr"].ToString()); // Füge Plan_Nr der ObservableCollection hinzu
                     }
                 }
                 catch (Exception ex)
@@ -107,11 +124,13 @@ namespace MangerTest.Training
             }
         }
 
+
+
         private void cmbGruppe_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //rdbVergleich.Checked = false;
             // Lösche alle vorhandenen Einträge in cmbUebung
-            cmbZiel.Items.Clear();
+           //cmbZiel.Items.Clear();
 
             // Wenn eine Gruppe ausgewählt ist, fülle cmbUebung mit den entsprechenden Übungen
             if (cmbGruppe.SelectedItem != null)
@@ -151,7 +170,6 @@ namespace MangerTest.Training
         private async Task LetzteAsync()
         {
             string selectedUebung = txtUebung.Text;
-
             string ConString = "data source=DESKTOP-726MH0T;initial catalog=gesundheit;trusted_connection=true";
             string CmdString = string.Empty;
 
@@ -181,8 +199,16 @@ namespace MangerTest.Training
                             // Letzten Eintrag in Textboxen einfügen (Gewicht & Wiederholungen)
                             if (dt.Rows.Count > 0)
                             {
-                                txtletztGewicht.Text = dt.Rows[0]["Gewicht"].ToString();
-                                txtLetztWh.Text = dt.Rows[0]["Wh"].ToString();
+                                // **HIER DIE ÄNDERUNG EINFÜGEN**
+                                if (decimal.TryParse(dt.Rows[0]["Gewicht"].ToString().Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal letztesGewicht))
+                                {
+                                    txtletztGewicht.Text = letztesGewicht.ToString("0.00", CultureInfo.InvariantCulture); // Speichere es im invarianten Format
+                                }
+                                else
+                                {
+                                    txtletztGewicht.Text = string.Empty; // Fehlerbehandlung, falls das Parsen fehlschlägt
+                                }
+                                txtLetztWh.Text = dt.Rows[0]["Wh"].ToString(); // Annahme: Wh ist eine ganze Zahl oder wird korrekt formatiert
                             }
                             else
                             {
@@ -194,12 +220,15 @@ namespace MangerTest.Training
                 }
 
                 dtgUeber.Visibility = Visibility.Visible;
+                // ver(); // Der Aufruf von ver() erfolgt im txtGewicht_TextChanged Event
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Fehler beim Abrufen der letzten Trainingsdaten: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
 
 
         private void Ver_Click(object sender, RoutedEventArgs e)
@@ -329,7 +358,7 @@ namespace MangerTest.Training
             {
                 chkNein.IsChecked = false;
                 kr = 1;
-                txtGewicht.Text = "0"; // Direkte Zuweisung als String ist besser in WPF
+               // txtGewicht.Text = "0"; // Direkte Zuweisung als String ist besser in WPF
                 cmbGruppe.SelectedIndex = 9;
                 MessageBox.Show(kr.ToString()); // MessageBox gehört zu WinForms, in WPF nutzt man z.B. eigene Dialoge oder Logging
             }
@@ -351,61 +380,111 @@ namespace MangerTest.Training
 
         public void ver()
         {
-
-            decimal a = 0;
-            decimal b = 0;
-
-
-
-            decimal i = Convert.ToDecimal((string)txtGewicht.Text);
-            decimal o = Convert.ToDecimal((string)txtletztGewicht.Text);
-
-            decimal e = Convert.ToDecimal((string)txtWh.Text);
-            decimal f = Convert.ToDecimal((string)txtLetztWh.Text);
+            var viewModel = (MuskelViewModel)this.DataContext;
+            decimal i = 0; // Initialisiere i mit einem Standardwert
+            decimal o = 0; // Initialisiere o mit einem Standardwert
+            decimal e = 0; // Initialisiere e mit einem Standardwert
+            decimal f = 0; // Initialisiere f mit einem Standardwert
             decimal p, percentChange;
             decimal u, percentChange1;
 
-            //  MessageBox.Show("i: " + i);
-            //  MessageBox.Show("o: " + o);
+            CultureInfo invariantCulture = CultureInfo.InvariantCulture;
 
-            if (o == 0)
+            // Versuche den aktuellen Gewichtswert zu parsen
+            decimal.TryParse(txtGewicht.Text, NumberStyles.Any, invariantCulture, out i);
+            bool validI = true; // Da i jetzt initialisiert ist, können wir validI immer als true annehmen (oder eine genauere Prüfung durchführen)
+
+            // Versuche den letzten Gewichtswert zu parsen
+            bool validO = !string.IsNullOrWhiteSpace(txtletztGewicht.Text) &&
+                          decimal.TryParse(txtletztGewicht.Text, NumberStyles.Any, invariantCulture, out o);
+            if (string.IsNullOrWhiteSpace(txtletztGewicht.Text))
             {
-                txtWh.Text = a.ToString();
-                txtVerPro.Text = b.ToString();
+                // Handle den Fall, dass kein letztes Gewicht vorhanden ist
+                txtVer.Text = "";
+                txtVerPro.Text = "";
+                // o ist bereits mit 0 initialisiert
+            }
+
+            // Versuche die Werte für Wiederholungen zu parsen
+            decimal.TryParse(txtWh.Text, NumberStyles.Any, invariantCulture, out e);
+            bool validE = true;
+
+            bool validF = !string.IsNullOrWhiteSpace(txtLetztWh.Text) &&
+                          decimal.TryParse(txtLetztWh.Text, NumberStyles.Any, invariantCulture, out f);
+            if (string.IsNullOrWhiteSpace(txtLetztWh.Text))
+            {
+                txtWHVer.Text = "";
+                txtWhProz.Text = "";
+                // f ist bereits mit 0 initialisiert
+            }
+
+            if (validI && validO) // Berechne die Veränderung nur, wenn beide Gewichtswerte gültig sind
+            {
+                if (o != 0)
+                {
+                   // MessageBox.Show($"i (txtGewicht): {i}, o (txtletztGewicht): {o}");
+                    p = i - o;
+                    percentChange = (p / o) * 100;
+                    viewModel.Veraenderung = p;
+                    txtVerPro.Text = percentChange.ToString("0.00") + "%";
+                }
+                else
+                {
+                    viewModel.Veraenderung = 0;
+                    txtVerPro.Text = "";
+                }
             }
             else
             {
-                p = i - o; // absolute Veränderung
-                percentChange = (p / o) * 100; // prozentuale Veränderung
-
-                txtVer.Text = p.ToString("00.00"); // absolute Veränderung
-                txtVerPro.Text = percentChange.ToString("00.00") + "%"; // prozentuale Veränderung
+                viewModel.Veraenderung = 0;
+                txtVerPro.Text = "";
             }
 
-            if (f == 0)
+            if (validE && validF) // Berechne die Veränderung der Wiederholungen
             {
-                txtLetztWh.Text = e.ToString();
-                txtWHVer.Text = f.ToString();
+                if (f != 0)
+                {
+                    u = e - f;
+                    percentChange1 = (u / f) * 100;
+                    txtWHVer.Text = u.ToString("0.00");
+                    txtWhProz.Text = percentChange1.ToString("0.00") + "%";
+                }
+                else
+                {
+                    txtWHVer.Text = "";
+                    txtWhProz.Text = "";
+                }
             }
             else
             {
-                u = e - f; // absolute Veränderung
-                percentChange1 = (u / f) * 100; // prozentuale Veränderung
-
-                txtWHVer.Text = u.ToString("00.00"); // absolute Veränderung
-                txtWhProz.Text = percentChange1.ToString("00.00") + "%"; // prozentuale Veränderung
+                txtWHVer.Text = "";
+                txtWhProz.Text = "";
             }
-
         }
 
+
         private void txtGewicht_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            ver();
+        {           
+           
+           // ver();
         }
 
         private async void txtUebung_TextChanged(object sender, TextChangedEventArgs e)
         {
-            await LetzteAsync();
+            if (!string.IsNullOrWhiteSpace(txtUebung.Text) && txtUebung.Text.Length > 2)
+            {
+                await LetzteAsync();
+            }
+        }
+
+        private void cmbGruppe_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            Debug.WriteLine("Ausgewählte Gruppe: " + ((ComboBox)sender).SelectedItem);
+        }
+
+        private void txtGewicht_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            ver(); // deine Methode
         }
     }
 }

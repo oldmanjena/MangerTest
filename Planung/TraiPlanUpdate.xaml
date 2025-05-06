@@ -1,0 +1,56 @@
+﻿<Window x:Class="MangerTest.Planung.TraiPlanUpdate"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MangerTest.Planung"
+        xmlns:view="clr-namespace:MangerTest.ViewModel"
+        mc:Ignorable="d"
+        Title="TraiPlanUpdate" Height="450" Width="1200">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <!-- Verwendung von * für dynamische Höhe -->
+        </Grid.RowDefinitions>
+
+        <!-- Das DataGrid bekommt jetzt eine automatische Höhe und kann scrollen -->
+        <ScrollViewer Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <DataGrid x:Name="dtgAnzeigen"
+                      ItemsSource="{Binding TrainingsListe}"
+                      SelectedItem="{Binding AusgewaehlterEintrag, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="False"
+                      Margin="10">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Was" Binding="{Binding Was, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Kommentar" Binding="{Binding Kommentar, Mode=TwoWay}" />
+                    <DataGridCheckBoxColumn Header="Erledigt" Binding="{Binding Erledigt, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Startgewicht" Binding="{Binding Startgewicht, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Endgewicht" Binding="{Binding Endgewicht, Mode=TwoWay}" />
+                    <DataGridTemplateColumn Header="Ende">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding Ende, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+
+        <Button x:Name="btnSpeichern" Grid.Column="1"
+                Content="Speichern"
+                Command="{Binding SpeichernCommand}"
+                HorizontalAlignment="Left" Margin="409,17,0,0"
+                VerticalAlignment="Top"/>
+    </Grid>
+</Window>

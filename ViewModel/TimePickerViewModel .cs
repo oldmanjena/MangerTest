@@ -11,20 +11,7 @@ namespace MangerTest.ViewModel
     public class TimePickerViewModel : INotifyPropertyChanged
     {
         // START- & ENDZEIT
-        private TimeSpan? _startzeit;
-        public TimeSpan? Startzeit
-        {
-            get => _startzeit;
-            set
-            {
-                _startzeit = value;
-                OnPropertyChanged(nameof(Startzeit));
-                Debug.WriteLine($"Startzeit: {_startzeit}");
-
-                // Setze Startzeit auch im NeuerEintrag
-                NeuerEintrag.Start = _startzeit ?? TimeSpan.Zero;  // Falls Startzeit null, auf 00:00 setzen
-            }
-        }
+       
 
         private TimeSpan? _endzeit;
         public TimeSpan? Endzeit
@@ -38,6 +25,8 @@ namespace MangerTest.ViewModel
         }
 
         // SELECTED DATE
+        public TrainingsViewModel TrainingsVM { get; set; }  // Referenz vom Parent-VM
+
         private DateTime? _selectedDate;
         public DateTime? SelectedDate
         {
@@ -47,15 +36,13 @@ namespace MangerTest.ViewModel
                 _selectedDate = value;
                 OnPropertyChanged(nameof(SelectedDate));
 
-                // Debug-Ausgabe
-                Debug.WriteLine($"SelectedDate: {_selectedDate}");
+                var date = value ?? DateTime.Now;
 
-                // Berechne Kalenderwoche und Wochentag
-                BerechneKalenderwoche(_selectedDate ?? DateTime.Now);
-                Wochentag = (_selectedDate ?? DateTime.Now).ToString("dddd", new CultureInfo("de-DE"));
+                BerechneKalenderwoche(date);
+                Wochentag = date.ToString("dddd", new CultureInfo("de-DE"));
 
-                // Debug-Ausgabe für Wochentag
-                Debug.WriteLine($"Wochentag: {Wochentag}");
+                // ← Wichtig: Datum auch im TrainingsViewModel setzen!
+                TrainingsVM?.SetDatumExtern(date); // Methode im TrainingsVM
             }
         }
 
@@ -90,7 +77,7 @@ namespace MangerTest.ViewModel
 
         public TimePickerViewModel()
         {
-            Startzeit = DateTime.Now.TimeOfDay;
+           // Startzeit = DateTime.Now.TimeOfDay;
             SelectedDate = DateTime.Now; // Triggert automatisch die KW-Berechnung
 
             // Beispiel: Einfacher Command

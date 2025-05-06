@@ -305,10 +305,7 @@ namespace MangerTest.Blut
             FillDataGrid();
         }
 
-        private void dtgDaten_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
+      
 
         private void Blutdruck_Loaded(object sender, RoutedEventArgs e)
         {

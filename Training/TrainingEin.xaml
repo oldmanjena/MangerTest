@@ -4,31 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:conv="clr-namespace:MangerTest.Converter"
-        xmlns:local="clr-namespace:MangerTest.Training" xmlns:viewmodel="clr-namespace:MangerTest.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:TimePickerViewModel}"
+        xmlns:local="clr-namespace:MangerTest.Training"
+        xmlns:viewmodel="clr-namespace:MangerTest.ViewModel"
+        xmlns:user="clr-namespace:MangerTest.user"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="TrainingEin" Height="450" Width="1000">
+        d:DataContext="{d:DesignInstance Type=viewmodel:TrainingsViewModel}"
+        Title="TrainingEin" Height="450" Width="1200"
+        Style="{StaticResource {x:Type Window}}">
 
     <Window.Resources>
-        <conv:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
+        <!-- Konverter für MaskedTextBox & Zahlen -->
+        <conv:MaskedTextToDecimalConverter x:Key="MaskedTextToDecimalConverter" />
+        <conv:MaskedTextToDoubleConverter x:Key="MaskedTextToDoubleConverter" />
+        <conv:StringToNullableDecimalConverter x:Key="DecimalConverter" />
     </Window.Resources>
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Eingabeformular -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="Auto" MinWidth="100"/>
-                <ColumnDefinition Width="192"/>
-                <ColumnDefinition Width="23*"/>
-                <ColumnDefinition Width="405*"/>
-                <!-- Neue Spalte für den Button -->
-            </Grid.ColumnDefinitions>
+        <Grid x:Name="btnEintragen">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -36,59 +36,102 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="331*"/>
+                <ColumnDefinition Width="Auto" MinWidth="161.5"/>
+                <ColumnDefinition Width="238*"/>
+                <ColumnDefinition Width="Auto" MinWidth="223"/>
+                <ColumnDefinition Width="Auto" MinWidth="126.457"/>
+            </Grid.ColumnDefinitions>
 
             <!-- Erste Zeile -->
             <TextBlock Text="Datum:" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <DatePicker x:Name="dtpWochentag" SelectedDate="{Binding TimePickerVM.SelectedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,18,5,18"/>
+            <DatePicker x:Name="dtpWochentag" SelectedDate="{Binding TimePickerVM.SelectedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5,18,118,18"/>
 
-            <TextBlock Text="KW:" Grid.Column="2" Height="20" Width="35" RenderTransformOrigin="1.214,0.455" Margin="50,24,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtKw" Text="{Binding TimePickerVM.KW, Mode=OneWay}" IsReadOnly="True" Grid.Column="3" Margin="17,18,65,21"/>
+            <TextBlock Text="KW:" Grid.Column="2" Height="20" Width="34" Margin="42,24,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtKw" Text="{Binding TimePickerVM.KW, Mode=OneWay}" IsReadOnly="True" Grid.Column="2" Margin="161,24,112,17" Grid.ColumnSpan="2" Width="NaN"/>
 
-            <!-- Zweite Zeile -->
+            <TextBlock Text="Aerob:" Grid.Column="4" Margin="10,0,0,0" TextWrapping="Wrap" Width="52" Height="20"/>
+
+            <xctk:DoubleUpDown x:Name="txtAerob" 
+                  Value="{Binding TrainingsVM.Aerober, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+		          Minimum="0.5" Maximum="100" Increment="0.1"
+		          Grid.Column="4" Margin="87,21,108,20" Width="75"/>    
+
+            <Button x:Name="btnEintragen1" Content="Eintragen" Command="{Binding TrainingsVM.EintragenCommand}" Grid.Row="0" Grid.Column="5" Width="100" Margin="20,2,0,18" HorizontalAlignment="Left"/>
+
+
             <TextBlock Text="Wochentag:" Grid.Row="1" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox x:Name="txtWochentag" Text="{Binding TimePickerVM.Wochentag, Mode=OneWay}" Grid.Row="1" Grid.Column="1" Margin="25,8,25,7" />
+            <DatePicker SelectedDate="{Binding TimePickerVM.SelectedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,12,0,4" Width="130" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Height="25"/>
 
-            <TextBlock Text="Start:" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox   Text="{Binding TimePickerVM.NeuerEintrag.Start, Converter={StaticResource TimeSpanToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
-            Grid.Row="1" Grid.Column="3" 
-            Margin="51,7,31,7"/>
+            <TextBlock Text="Start:" Grid.Row="1" Grid.Column="2" Height="20" Margin="42,8,0,0" VerticalAlignment="Top" Width="100"/>
+            <TextBox d:DataContext="{d:DesignInstance Type=viewmodel:TrainingsViewModel}" x:Name="txtStart" Text="{Binding TrainingsVM.Start, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" Margin="161,8,112,7" Grid.ColumnSpan="2" Width="NaN"/>
 
-            <!-- Dritte Zeile -->
-            <TextBlock Text="Dauer:" Grid.Row="2" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding TimePickerVM.NeuerEintrag.Start, Converter={StaticResource TimeSpanToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
-                     Grid.Row="2" Grid.Column="1" Margin="25,5,5,5"/>
+            <TextBlock Text="Anaerob:" Grid.Column="4" Grid.Row="1" Margin="22,8,0,0" VerticalAlignment="Top" Width="52" Height="20" RenderTransformOrigin="-0.125,0.775"/>
+            <xctk:DoubleUpDown x:Name="txtAnearob" 
+                     Value="{Binding TrainingsVM.Anaerober, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Minimum="0.5" Maximum="100" Increment="0.1"
+                     Grid.Column="4" Grid.Row="1" 
+                     Margin="80,7,106,9" Width="80"/>
 
-            <TextBlock Text="RPM:" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding NeuerEintrag.RPM}" Grid.Row="2" Grid.Column="3" Margin="51,5,31,5"/>
+            <TextBlock x:Name="Dauer" Text="Dauer:" Grid.Row="2" HorizontalAlignment="Center" Height="20" Width="100"/>
+            <TextBox x:Name="txtDauer"  Text="{Binding TrainingsVM.DauerString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="0,9,195,13" Width="NaN"/>
 
-            <!-- Vierte Zeile -->
+            <TextBlock Text="RPM:" Grid.Row="2" Grid.Column="2" Height="20" Width="34" Margin="42,11,0,0" VerticalAlignment="Top"/>
+            <TextBox Text="{Binding TrainingsVM.RPM, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Margin="161,11,112,12" Grid.ColumnSpan="2" Width="NaN"/>
+
+            <TextBlock Text="Regeneration:" Grid.Column="4" Grid.Row="2" Margin="6,0,0,0" Width="84" Height="20"/>
+            <TextBox x:Name="txtRegeneration"                                
+                                Text="{Binding TrainingsVM.Regeneration, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MaskedTextToDecimalConverter}}"
+                                Grid.Row="2" Grid.Column="4"
+                                Margin="85,8,101,12" Height="25" Width="80"/>
+
             <TextBlock Text="Entfernung:" Grid.Row="3" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding NeuerEintrag.Entfernung}" Grid.Row="3" Grid.Column="1" Margin="25,5,5,5"/>
+            <TextBox x:Name="txtEntfernung"
+                     Text="{Binding TrainingsVM.Entfernung, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MaskedTextToDecimalConverter}}"
+                     Language="de-DE"
+                     Grid.Row="3" Grid.Column="1"
+                     Margin="0,2,195,8"
+                     Width="NaN"/>
+            <TextBlock Text="Kcal:" Grid.Row="3" Grid.Column="2" Height="20" Width="34" Margin="38,6,0,0" VerticalAlignment="Top"/>
+            <TextBox  x:Name="txtKcal"
+                     Text="{Binding TrainingsVM.Kcal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MaskedTextToDecimalConverter}}"
+                     Language="de-DE"                     
+                     Grid.Row="3" Grid.Column="2"
+                     Margin="161,2,112,8" Grid.ColumnSpan="2" Width="NaN" />
 
-            <TextBlock Text="Kcal:" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding NeuerEintrag.Kcal}" Grid.Row="3" Grid.Column="3" Margin="51,5,31,5"/>
+            <TextBlock Text="VO2max:" Grid.Column="4" Grid.Row="3" Margin="14,5,0,0" VerticalAlignment="Top" Width="60" Height="20"/>
+            <TextBox Text="{Binding TrainingsVM.VO2max, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Grid.Row="3" Margin="85,0,101,10" Width="84"/>
 
-            <!-- Fünfte Zeile -->
             <TextBlock Text="Puls:" Grid.Row="4" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding NeuerEintrag.Puls}" Grid.Row="4" Grid.Column="1" Margin="25,5,5,5"/>
+            <TextBox Text="{Binding TrainingsVM.Puls, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Margin="0,5,195,5" Width="NaN"/>
 
-            <TextBlock Text="Plan Nr:" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <ComboBox x:Name="cmbPlan" Grid.Row="4" Grid.Column="3" Margin="26,5,26,5" Width="NaN"/>
+            <TextBlock Text="Plan Nr:" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Height="20" Width="54"/>
+            <ComboBox x:Name="cmbPlan" 
+                 ItemsSource="{Binding TrainingsVM.PlanNrList}"
+                 SelectedItem="{Binding TrainingsVM.PlanNr, Mode=TwoWay}"            
+                 Grid.Row="4" Grid.Column="3"
+                 Margin="10,5,42,5" Width="NaN"/>
 
+
+            <TextBlock Text="Kommentar:" Grid.Row="5" HorizontalAlignment="Center" Height="20" Width="100"/>
+            <TextBox Text="{Binding TrainingsVM.Kommentar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Margin="10,4,94,10" Grid.Column="1" Width="NaN" Grid.ColumnSpan="4"/>
 
             <!-- Sechste Zeile -->
             <TextBlock Text="Kommentar:" Grid.Row="5" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding NeuerEintrag.Kommentar}" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Margin="16,7,166,7"/>
-
-            <!-- Button -->
-            <Button Content="Eintragen" Command="{Binding EintragenCommand}" 
-            Grid.Row="0" Grid.Column="5" 
-            Width="100" Margin="221,10,0,10" 
-            HorizontalAlignment="Left"/>
+            <TextBox Text="{Binding TrainingsVM.Kommentar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Margin="10,4,94,10" Grid.Column="1" Width="NaN" Grid.ColumnSpan="4"/>
         </Grid>
 
         <!-- DataGrid für Trainingsdaten -->
-        <DataGrid ItemsSource="{Binding TrainingsDaten}" Grid.Row="1" AutoGenerateColumns="True" Margin="0,10,0,0"/>
+        <DataGrid ItemsSource="{Binding TrainingsVM.TrainingsDaten}" Grid.Row="1" AutoGenerateColumns="True" Margin="0,10,0,0"/>
+        <Border Grid.Row="3" Background="LightGray" Padding="8">
+            <TextBlock Text="© 2025 – Dein Gesundheitsmanager | Letzte Änderung: Heute  | Mithilfe von ChatGPT und Gemini" 
+               HorizontalAlignment="Center" 
+               FontStyle="Italic"
+               Foreground="Gray" Width="628"/>
+        </Border>
     </Grid>
 </Window>

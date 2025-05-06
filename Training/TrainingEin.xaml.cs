@@ -1,4 +1,5 @@
-﻿using MangerTest.ViewModel;
+﻿using MangerTest.Converter;
+using MangerTest.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -14,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WPFMaskedTextBox;
 using Calendar = System.Globalization.Calendar;
 
 namespace MangerTest.Training
@@ -25,51 +27,43 @@ namespace MangerTest.Training
     {
         public TrainingEin()
         {
+            var combinedVM = new CombinedViewModel();
+
+            // 🔗 Verbindung zwischen TimePickerVM und TrainingsVM herstellen
+            combinedVM.TimePickerVM.TrainingsVM = combinedVM.TrainingsVM;
+
+            // 🎯 ViewModel an View binden
+            DataContext = combinedVM;
+
             InitializeComponent();
-            DataContext = new CombinedViewModel();
-            Cb_Groesse(); // Daten in die ComboBox laden
+           // DataContext = new CombinedViewModel();
+           
             //UpdateKalenderwoche(DateTime.Today);
+
+            var timeSpanConverter = new TimeSpanToStringConverter();
+            Resources.Add("TimeSpanToStringConverter", timeSpanConverter);        
+
 
 
         }
 
         public class CombinedViewModel
         {
-            public TrainingsViewModel TrainingsVM { get; set; } = new();
-            public TimePickerViewModel TimePickerVM { get; set; } = new();
+            public TrainingsViewModel TrainingsVM { get; set; }
+            public TimePickerViewModel TimePickerVM { get; set; }
 
-           
-        }
-
-        private void Cb_Groesse()
-        {
-            string connectionString = "data source=DESKTOP-726MH0T;initial catalog=gesundheit;trusted_connection=true";
-
-            using (SqlConnection con = new SqlConnection(connectionString))
+            public CombinedViewModel()
             {
-                string query = "SELECT * FROM Planung WHERE erledigt < 1";
-                SqlCommand cmd = new SqlCommand(query, con);
+                TrainingsVM = new TrainingsViewModel();
+                TimePickerVM = new TimePickerViewModel();
 
-                int spalten_nr = 4; // Spaltenindex für die gewünschten Werte
+                TimePickerVM.TrainingsVM = TrainingsVM; // Verbindung setzen
 
-                try
-                {
-                    con.Open();
-                    SqlDataReader dr = cmd.ExecuteReader();
-
-                    cmbPlan.Items.Clear(); // Falls die ComboBox bereits Einträge enthält
-                    while (dr.Read())
-                    {
-                        cmbPlan.Items.Add(dr.GetValue(spalten_nr).ToString());
-                    }
-                    dr.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Fehler beim Laden der Daten: " + ex.Message);
-                }
+                TrainingsVM.LadePlaene(); // <--- WICHTIG: Jetzt werden die Pläne geladen
             }
         }
+
+
 
 
         private void UpdateKalenderwoche(DateTime datum)
@@ -85,6 +79,32 @@ namespace MangerTest.Training
             int kw = cal.GetWeekOfYear(datum, rule, firstDay);
             txtKw.Text = $"KW {kw}";
         }
+       
 
+        private void txtEntfernung_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as MaskedTextBox;
+            if (textBox != null)
+            {
+                // Prüfen, ob der Text ein Komma enthält und durch einen Punkt ersetzen
+                string inputText = textBox.Text;
+
+                // Ersetze Komma durch Punkt
+                if (inputText.Contains(","))
+                {
+                    inputText = inputText.Replace(",", ".");
+                }
+
+                // Wenn der Text geändert wurde, die Bindung mit dem neuen Text aktualisieren
+                if (inputText != textBox.Text)
+                {
+                    textBox.Text = inputText;
+                    // Setze den Cursor ans Ende des Textes, damit der Benutzer weiter eingeben kann
+                    textBox.SelectionStart = textBox.Text.Length;
+                }
+            }
+        }
+
+   
     }
 }

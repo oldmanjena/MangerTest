@@ -1,9 +1,14 @@
 ﻿using ManagerTest.Views;
 using MangerTest.Anzeigen;
+using MangerTest.Planung;
 using MangerTest.Blut;
 using MangerTest.Essen;
+using MangerTest.Schmerz;
+using MangerTest.Ziel;
 using MangerTest.Training;
 using System.Windows;
+using MangerTest.Auswertungen;
+using MangerTest.Gewicht;
 
 namespace MangerTest;
 
@@ -78,6 +83,42 @@ public partial class MainWindow : Window
     {
         MuskelEin MSK = new MuskelEin();
         MSK.Show();
+    }
+
+    private void Training_Click(object sender, RoutedEventArgs e)
+    {
+        TraiPlanung plan = new TraiPlanung();
+        plan.Show();
+    }
+
+    private void PlanUpdate_Click(object sender, RoutedEventArgs e)
+    {
+        TraiPlanUpdate pud = new TraiPlanUpdate();
+        pud.Show();
+    }
+
+    private void Schmerz_Click(object sender, RoutedEventArgs e)
+    {
+        schmerzaufzeichnungen schmerz = new schmerzaufzeichnungen();
+        schmerz.Show();
+    }
+
+    private void ZielEin_Click(object sender, RoutedEventArgs e)
+    {
+        ZielEin ziel = new ZielEin();
+        ziel.Show();
+    }
+
+    private void Woche_Click(object sender, RoutedEventArgs e)
+    {
+        WochenGruppen wochen = new WochenGruppen();
+        wochen.Show();
+    }
+
+    private void Koerpergewicht_Click(object sender, RoutedEventArgs e)
+    {
+        KoerperdatenView koerperdaten = new KoerperdatenView();
+        koerperdaten.Show();
     }
 }
 

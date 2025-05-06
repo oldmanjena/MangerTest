@@ -1,0 +1,158 @@
+﻿<Window x:Class="MangerTest.Ziel.ZielEin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="clr-namespace:MangerTest.Converter"
+        xmlns:local="clr-namespace:MangerTest.Ziel"
+       
+        mc:Ignorable="d"
+        Title="ZielEin" Height="450" Width="800">
+
+    <Window.Resources>
+        <!-- Konverter für MaskedTextBox & Zahlen -->
+        <conv:MaskedTextToDecimalConverter x:Key="MaskedTextToDecimalConverter" />
+        <conv:MaskedTextToDoubleConverter x:Key="MaskedTextToDoubleConverter" />
+        <conv:StringToNullableDecimalConverter x:Key="DecimalConverter" />
+        <conv:FlowDocumentToStringConverter x:Key="FlowDocumentToStringConverter" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="268"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Datum" Margin="5,5,5,5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="21.991"/>
+                    <ColumnDefinition Width="98.009"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Anlage:" Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+                <DatePicker x:Name="dtpAn" HorizontalAlignment="Left" Margin="82,4,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="1"/>
+                <Label Content="Erledigt:" Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+                <DatePicker x:Name="dtpEr" Grid.Column="1" HorizontalAlignment="Left" Margin="82,0,0,0" Grid.Row="1" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Notizen:" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,144,5,-165">
+            <TextBox x:Name="textBox" HorizontalAlignment="Left" 
+                Margin="11,0,0,0"  TextWrapping="Wrap" 
+                Text="{Binding Notiz, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                VerticalAlignment="Top" Width="751"/>
+        </GroupBox>
+        <Button x:Name="btnEnde" Grid.Column="1" Content="Beenden"
+                HorizontalAlignment="Left" Margin="359,51,0,0" 
+                VerticalAlignment="Top" Height="40" Width="120" 
+                RenderTransformOrigin="0.022,0.469" Click="btnEnde_Click" Grid.Row="1"/>
+        <GroupBox Header="Einheiten" Grid.Column="1" Margin="29,5,288,5" Cursor="">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="102.214"/>
+                    <ColumnDefinition Width="17.786"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="41*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Einheit:" Grid.Row="0" Grid.Column="0" Margin="0,5,10,5" Grid.ColumnSpan="2"/>
+                <TextBox x:Name="txtEinheit" 
+                         Text="{Binding Einheit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="0" 
+                         Margin="74,5,15,11" 
+                         Grid.ColumnSpan="4"/>
+
+                <Label x:Name="txtRichtung" Content="Richtung:" Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+                <TextBox Grid.Row="1"
+                         Text="{Binding Richtung, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="79,5,10,11" 
+                         Grid.ColumnSpan="4"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Änderung:" Margin="5,5,5,-8" Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="21.991"/>
+                    <ColumnDefinition Width="98.009"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Veränderung:" Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+                <TextBox x:Name="txtWerEr" Grid.Column="1" 
+                         HorizontalAlignment="Left" Margin="78,10,0,0" 
+                         TextWrapping="Wrap" 
+                         Text="{Binding Veraenderung, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MaskedTextToDecimalConverter}}" 
+                         VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Werte:" Grid.Column="1" Margin="280,10,37,9" Cursor="">
+            <Grid Height="73">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="102.214"/>
+                    <ColumnDefinition Width="17.786"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="41*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Zielwert:" Grid.Row="0" Grid.Column="0" Margin="0,5,10,5" Grid.ColumnSpan="2"/>
+                <TextBox x:Name="txtZielwert" 
+                         Text="{Binding Zielwert, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MaskedTextToDecimalConverter}}"
+                         Grid.Row="0" Margin="74,5,15,11" 
+                         Grid.ColumnSpan="4"/>
+
+                <Label x:Name="lblErfasst"  Content="Erfasst:" Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+                <TextBox x:Name="txtWertEr" 
+                         Text="{Binding Erfasst, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MaskedTextToDecimalConverter}}"
+                         Grid.Row="1" Margin="97,5,31,11" 
+                         Grid.ColumnSpan="4"/>
+            </Grid>
+        </GroupBox>
+        <Button x:Name="btnErf" Grid.Column="1" 
+                Command="{Binding EintragCommand}" Cursor="Hand"
+                Content="Erfassen" HorizontalAlignment="Left" 
+                Margin="359,96,0,0" VerticalAlignment="Top" 
+                Click="btnErf_Click" Grid.Row="1"/>
+        <GroupBox Header="Bezeichnung:" Margin="31,5,243,-8" Grid.Row="1" Grid.Column="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="21.991"/>
+                    <ColumnDefinition Width="98.009"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Was:" Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+                <TextBox x:Name="txtWerEr1" Grid.Column="1" 
+                    HorizontalAlignment="Left" Margin="78,10,0,0" 
+                    TextWrapping="Wrap" 
+                    Text="{Binding Was, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:user="clr-namespace:MangerTest.user"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Name="Blutdruck"
         x:Class="MangerTest.Blut.ErfassBlut"
         mc:Ignorable="d"
@@ -13,6 +14,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="150"/>
             <RowDefinition Height="200"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -43,7 +45,7 @@
 
         <!-- Bemerkung -->
         <Label Content="Bemerkung:" Grid.Row="2" VerticalAlignment="Top" Margin="34,20,34,0" Height="30"/>
-        <TextBox x:Name="txtBemerkung" Grid.Row="2" Height="NaN" Text="Bemerkung" TextWrapping="Wrap" Margin="12,10,90,10" TextChanged="txtBemerkung_TextChanged" Grid.Column="1" Width="NaN" Grid.ColumnSpan="4"/>
+        <TextBox x:Name="txtBemerkung" Grid.Row="2" Height="NaN" TextWrapping="Wrap" Margin="12,10,90,75" TextChanged="txtBemerkung_TextChanged" Grid.Column="1" Width="NaN" Grid.ColumnSpan="4"/>
 
         <!-- Buttons -->
         <xctk:MaskedTextBox x:Name="txtZeit" 
@@ -57,8 +59,9 @@
                   Grid.Row="3" 
                   Grid.ColumnSpan="6" 
                   Margin="10,85,10,-146" 
-                  AutoGenerateColumns="True"
-                  SelectionChanged="dtgDaten_SelectionChanged"/>
+                  AutoGenerateColumns="True" />
+
         <Image x:Name="icoVorhof" Grid.Column="5" HorizontalAlignment="Left" Height="46" Margin="37,20,0,0" Grid.Row="2" VerticalAlignment="Top" Width="50" Source="/Blut/vorhof12.png" RenderTransformOrigin="0.16,-0.174"   MouseLeftButtonDown="icoVorhof_MouseLeftButtonDown_1"/>
+        <user:FooterControl Grid.Row="4" Grid.ColumnSpan="2" Margin="34,81,154,-82" />
     </Grid>
 </Window>

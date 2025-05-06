@@ -3,9 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:conv="clr-namespace:MangerTest.Converter"
+        xmlns:vm="clr-namespace:MangerTest.ViewModel" 
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="MuskelEin" Height="600" Width="1300">
-    <Grid>
+
+    <Window.Resources>
+        <conv:MaskedTextToDecimalConverter x:Key="MaskedTextToDecimalConverter" />
+        <conv:MaskedTextToDoubleConverter x:Key="MaskedTextToDoubleConverter" />
+        <conv:StringToNullableDecimalConverter x:Key="DecimalConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+
+    <Grid Cursor="">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -14,18 +26,16 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <!-- ← das ist neu -->
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
-            <!-- Label-Spalte -->
             <ColumnDefinition Width="200"/>
-            <!-- Eingabefeld -->
             <ColumnDefinition Width="231"/>
             <ColumnDefinition/>
-            <!-- Restlicher Platz -->
             <ColumnDefinition Width="Auto" MinWidth="93"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -35,70 +45,148 @@
         <DatePicker x:Name="dtpDatum" Grid.Row="0" Grid.Column="1" Margin="5,5,5,5" Width="150" Height="25" SelectedDate="{Binding SelectedDate}"/>
 
         <Label Content="Muskelgruppe:" Grid.Row="1" Grid.Column="0" Margin="5,5,5,5"/>
-        <ComboBox x:Name="cmbGruppe" Grid.Row="1" Grid.Column="1" Margin="12,12,32,12" Width="NaN" Height="NaN" SelectionChanged="cmbGruppe_SelectionChanged"/>
-        <Label Content="Trainingsnummer:" Grid.Row="1" Grid.Column="2" Margin="5,5,5,5"/>
-        <ComboBox x:Name="cmbtrainingsnummer" Grid.Row="1" Grid.Column="3" Margin="10,12,0,12" Width="150" Height="NaN" HorizontalAlignment="Left"/>
+        <ComboBox x:Name="cmbGruppe"
+                  ItemsSource="{Binding Gruppen}"
+                  SelectedItem="{Binding Muskelgruppe}"                  
+                  Grid.Row="1" Grid.Column="1" Margin="12,12,32,12"
+                  Width="NaN" Height="NaN" SelectionChanged="cmbGruppe_SelectionChanged_1" />
+
+        <Label Content="Trainingsnummer:" Grid.Row="1" Grid.Column="2" Margin="147,5,5,5" Height="25" Width="79"/>
+        <ComboBox x:Name="cmbtrainingsnummer"
+                  ItemsSource="{Binding Trainingsnummern}"
+                  SelectedItem="{Binding TrainNr}"
+                  Grid.Row="1" Grid.Column="3"
+                  Margin="10,12,0,12" Width="150" Height="NaN"
+                  HorizontalAlignment="Left"/>
+
         <Label Content="Letzte WH Anzahl:" Grid.Row="5" Grid.Column="3" Margin="0,10,388,11"/>
-        <TextBox x:Name="txtLetztWh" Grid.Row="5" Grid.Column="3" Margin="128,12,262,13" Width="NaN" Height="NaN"/>
+        <TextBox x:Name="txtLetztWh" Grid.Row="5" Grid.Column="3" Margin="93,12,328,13" Width="75" Height="NaN"/>
 
         <Label Content="Zielmuskel:" Grid.Row="2" Grid.Column="0" Margin="5,5,5,5"/>
-        <ComboBox x:Name="cmbZiel" Grid.Row="2" Grid.Column="1" Margin="12,12,36,12" Width="152" Height="NaN"/>
-        <Label Content="Trainingsart:" Grid.Row="2" Grid.Column="2" Margin="5,5,5,5"/>
+        <ComboBox x:Name="cmbZiel"
+                  ItemsSource="{Binding Ziele}"
+                  SelectedItem="{Binding Zielmuskel}"
+                  Grid.Row="2" Grid.Column="1"
+                  Margin="12,12,36,12" Width="152" Height="NaN"/>
+        <Label Content="Trainingsart:" Grid.Row="2" Grid.Column="2" Margin="147,12,5,17" Height="25"/>
         <ComboBox x:Name="cmbArt"
-          Grid.Row="2" Grid.Column="3"
-          Margin="10,13,336,18" Width="150" Height="23"
-          ItemsSource="{Binding Trainingsarten}"/>
-        <Label Content="Letztes Gewicht:" Grid.Row="5" Grid.Column="3                " Margin="298,5,0,5" HorizontalAlignment="Left" Width="100"/>
-        <TextBox x:Name="txtletztGewicht" Grid.Row="5" Grid.Column="3" Margin="398,12,19,14" Width="NaN" RenderTransformOrigin="-3.96,2.9" SelectionOpacity="100"/>
+                  Grid.Row="2" Grid.Column="3"
+                  Margin="10,13,336,18" Width="150" Height="23"
+                  />
+        <Label Content="Letztes Gewicht:" Grid.Row="5" Grid.Column="3          " Margin="190,12,0,9" HorizontalAlignment="Left" Width="100" Height="30"/>
+        <TextBox x:Name="txtletztGewicht" Grid.Row="5" Grid.Column="3"
+                 Margin="294,13,123,13" Width="NaN"
+                 RenderTransformOrigin="-3.96,2.9"
+                 SelectionOpacity="100"/>
 
         <Label Content="Übung:" Grid.Row="3" Grid.Column="0" Margin="5,5,5,5"/>
-        <TextBox x:Name="txtUebung" Grid.Row="3" Grid.Column="1" Margin="12,13,12,13" Width="150" Height="NaN" HorizontalAlignment="Left" TextChanged="txtUebung_TextChanged" />
-        <Label Content="Technik:" Grid.Row="3" Grid.Column="2" Margin="5,5,5,5"/>
+        <TextBox x:Name="txtUebung" Grid.Row="3"
+                 Text="{Binding Uebung, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Grid.Column="1" Margin="12,13,12,13" Width="150"
+                 Height="NaN" HorizontalAlignment="Left"
+                 TextChanged="txtUebung_TextChanged" />
+        <Label Content="Technik:" Grid.Row="3" Grid.Column="2" Margin="147,5,29,18"/>
         <ComboBox x:Name="cmbTechnik" Grid.Row="3" Grid.Column="3" Margin="10,8,345,18" Width="NaN"/>
 
         <Label Content="Satz:" Grid.Row="4" Grid.Column="0" Margin="5,5,5,5"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Margin="12,13,12,13" Width="150" Height="25" HorizontalAlignment="Left"/>
-        <Label Content="Gewicht Verän." Grid.Row="4" Grid.Column="2" Margin="0,0,91,0" VerticalAlignment="Top" Height="25"/>
-        <TextBox x:Name="txtVer" Grid.Row="4" Grid.Column="2" Margin="230,0,357,34" Width="NaN" Grid.ColumnSpan="2"/>
+        <xctk:IntegerUpDown  x:Name="txtSatz" Grid.Row="4" Grid.Column="1"                
+                 Value="{Binding Satz, Mode=TwoWay}"                      
+                  Minimum="0" Maximum="100" 
+                  Margin="12" Width="65" Height="25"
+                  HorizontalAlignment="Left"/>       
+
+        <Label Content="Gewicht Verän." Grid.Row="4" Grid.Column="2" Margin="147,0,0,0" VerticalAlignment="Top" Height="25"/>
+        <TextBox x:Name="txtVer"
+                 Text="{Binding Veraenderung, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MaskedTextToDecimalConverter}}"
+                 Grid.Row="4" Grid.Column="2" Margin="230,0,357,34"
+                 Width="75" Grid.ColumnSpan="2"/>
 
 
         <Label Content="Wiederholungen:" Grid.Row="5" Grid.Column="0" Margin="5,5,5,5"/>
-        <TextBox x:Name="txtWh" Grid.Row="5" Grid.Column="1" Margin="12,10,0,16" Width="150" HorizontalAlignment="Left"/>
+        
+        <xctk:IntegerUpDown  x:Name="txtWh" Grid.Row="5" Grid.Column="1"
+          Foreground="Black" Background="White"
+          Value="{Binding Wiederholungen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+          Increment="1"                   
+           Minimum="5" Maximum="100" 
+           Margin="12" Width="65" Height="25"
+           HorizontalAlignment="Left"/>
+        
         <Label Content="Prozentuale Gewicht:" Grid.Row="4" Grid.Column="3" Margin="157,0,206,34" Height="25"/>
 
         <Label Content="Trainingsgewicht:" Grid.Row="6" Grid.Column="0" Margin="5,5,5,5"/>
-        <TextBox x:Name="txtGewicht" Grid.Row="6" Grid.Column="1" Margin="12,13,0,5" Width="150" HorizontalAlignment="Left" TextChanged="txtGewicht_TextChanged"/>
-        <Label Content="Krank?" Grid.Row="6" Grid.Column="2" Margin="5,5,5,5"/>
-        <CheckBox x:Name="chkKrank" Content="Krank" Grid.Row="6" Grid.Column="3" Margin="5,10,380,0" Height="25"/>
+        <xctk:DoubleUpDown x:Name="txtGewicht" Grid.Row="6"
+          Value="{Binding Gewicht, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MaskedTextToDecimalConverter}}"
+		  Minimum="0" Maximum="100" Increment="2.5"
+          Grid.Column="1" Margin="12,13,0,5" Width="75" HorizontalAlignment="Left"
+         ValueChanged="txtGewicht_ValueChanged"/>
 
-        <CheckBox x:Name="chkNein" Content="nicht Krank" Grid.Row="6" Grid.Column="3" Margin="121,17,281,219" Grid.RowSpan="2"/>
+        <Label Content="Krank?" Grid.Row="5" Grid.Column="2" Margin="5,44,5,17" Grid.RowSpan="2"/>
+        <CheckBox x:Name="chkKrank"
+                  IsChecked="{Binding IstKrank, Mode=TwoWay}"
+                  Content="Krank"
+                  Grid.Row="6" Grid.Column="3"
+                  Margin="5,0,380,18" Height="25"/>
 
-        <DataGrid x:Name="dtgUeber" Grid.Row="7"   Grid.ColumnSpan="4"
-          Visibility="Collapsed"
-          AutoGenerateColumns="True"
-          HeadersVisibility="Column"
-          GridLinesVisibility="Horizontal"
-          CanUserAddRows="False"
-          CanUserDeleteRows="False"
-          IsReadOnly="True"
-          Margin="10,10,6,10"
-          FontSize="14"
-          RowHeight="30"
-          AlternatingRowBackground="LightGray"
-          ColumnHeaderHeight="40"
-          ItemsSource="{Binding LetzteTrainingData.View}" />
+        <CheckBox x:Name="chkNein"
+                  IsChecked="{Binding IstNichtKrank, Mode=TwoWay}"
+                  Content="nicht Krank"
+                  Grid.Row="6" Grid.Column="3"
+                  Margin="121,0,281,14"/>
 
-        <Button Content="Eintragen" Grid.Row="1" Grid.Column="5" Margin="9,10,1,0" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnVer" Content="Veränderung" Grid.Column="5" Margin="10,9,-8,5" Grid.ColumnSpan="2" Grid.Row="2" Click="Ver_Click"/>
-        <Button Content="Aufwärmen" Grid.Column="5" Margin="10,5,-8,5" Grid.ColumnSpan="2" Grid.Row="3"/>
-        <Button Content="Hypetrophie" Grid.Column="5" Margin="9,6,-7,6" Grid.ColumnSpan="2" Grid.Row="4"/>
-        <Button Content="Ausdauer" Grid.Row="5" Grid.Column="5" Margin="2,1,0,7" Grid.ColumnSpan="2"/>
-        <Button x:Name="btn_Ende" Content="Beenden" Grid.Row="0" Grid.Column="5" Margin="10,10,0,0" RenderTransformOrigin="-0.48,0.7" Grid.ColumnSpan="2" Click="btn_Ende_Click"/>
-        <CheckBox x:Name="chkletztes" Grid.Column="3" Content="Letzte Einheit anzeigen" Checked="chkletztes_Checked" Grid.ColumnSpan="2" Margin="5,10,88,40" Grid.RowSpan="2" Width="150" Height="25" HorizontalAlignment="Left" />
-        <TextBox x:Name="txtVerPro" Grid.Column="3" HorizontalAlignment="Left" Margin="298,0,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="25"/>
-        <Label x:Name="label" Grid.Column="2" Content="WH Veränd." HorizontalAlignment="Left" Margin="10,25,0,0" Grid.Row="4" VerticalAlignment="Top" Height="25"/>
-        <TextBox x:Name="txtWHVer" Grid.Column="2" HorizontalAlignment="Left" Margin="230,29,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Grid.ColumnSpan="2"/>
+        <Grid Grid.Row="7" Grid.ColumnSpan="4" Margin="10,10,6,10">
+            <DataGrid x:Name="dtgUeber"
+                      Visibility="{Binding IstDtgUeberSichtbar, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      AutoGenerateColumns="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      FontSize="14"
+                      RowHeight="30"
+                      AlternatingRowBackground="LightGray"
+                      ColumnHeaderHeight="40"
+                      ItemsSource="{Binding LetzteTrainingData.View}" />
+
+            <DataGrid x:Name="dtgAndereDaten"
+                      Visibility="{Binding IstDtgAndereDatenSichtbar, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      AutoGenerateColumns="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      FontSize="14"
+                      RowHeight="30"
+                      AlternatingRowBackground="LightYellow"
+                      ColumnHeaderHeight="40"
+                      ItemsSource="{Binding AufwaermDatenView}" />
+
+        </Grid>
+
+        <Button Content="Eintragen"
+                Command="{Binding EintragenCommand}"
+                Grid.Row="1" Grid.Column="5"
+                Margin="0,5,10,5" Grid.ColumnSpan="2" Cursor="Hand"/>
+        <Button x:Name="btn_Ende" Content="Beenden" Grid.Row="0" Grid.Column="5" Margin="0,5,10,5" RenderTransformOrigin="-0.48,0.7" Grid.ColumnSpan="2" Click="btn_Ende_Click"/>
+        <TextBox x:Name="txtVerPro" Grid.Column="3" HorizontalAlignment="Left" Margin="298,0,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="25"/>
+        <Label x:Name="label" Grid.Column="2" Content="WH Veränd." HorizontalAlignment="Left" Margin="147,30,0,0" Grid.Row="4" VerticalAlignment="Top" Height="25" Width="100"/>
+        <TextBox x:Name="txtWHVer" Grid.Column="3" HorizontalAlignment="Left" Margin="33,29,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
         <Label x:Name="txtWHVerPro" Grid.Column="3" Content="Proz WH:" HorizontalAlignment="Left" Margin="169,28,0,0" Grid.Row="4" VerticalAlignment="Top" Height="25"/>
-        <TextBox x:Name="txtWhProz" Grid.Column="3" HorizontalAlignment="Left" Margin="298,30,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtWhProz" Grid.Column="3" HorizontalAlignment="Left" Margin="298,30,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="txtAufwärmen" Grid.Column="5" 
+                 Content="Aufwärmen anzeigen" 
+                 Command="{Binding AnzeigenAufwaermenCommand}"
+                Grid.ColumnSpan="2" HorizontalAlignment="Left" 
+                Grid.Row="2" VerticalAlignment="Center" Cursor="Hand"
+                />
+
+        <Border Grid.Row="8" Background="LightGray" Padding="8" Grid.ColumnSpan="7" Margin="0,120,10,0">
+            <TextBlock Text="© 2025 – Dein Gesundheitsmanager | Letzte Änderung: Heute" 
+               HorizontalAlignment="Center" 
+               FontStyle="Italic"
+               Foreground="Gray" Width="500"/>
+        </Border>
     </Grid>
 </Window>
