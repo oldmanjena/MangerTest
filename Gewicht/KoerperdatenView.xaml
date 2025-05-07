@@ -152,14 +152,14 @@
                     Command="{Binding SpeichernCommand, PresentationTraceSources.TraceLevel=High}"
                     Cursor="Arrow" Height="35" Margin="20,0,0,0"/>
 
-            <StackPanel Grid.Column="2" Grid.Row="11" Grid.RowSpan="5"
-            Margin="10,5,10,0" Width="80" Height="150" VerticalAlignment="Top">
+            <StackPanel Grid.Column="2" Grid.Row="14" Grid.RowSpan="2"
+            Margin="-12,-35,76,0" Height="35" VerticalAlignment="Center" Grid.ColumnSpan="2" Width="95">
                 <!-- Rote Ampel -->
-                <Ellipse Width="30" Height="30" Fill="{Binding AmpelRot}"  Margin="10"/>
+                <Ellipse Width="15" Height="15" Fill="{Binding AmpelRot}"  Margin="-60,12,10,20" RenderTransformOrigin="-3.55,1.1"/>
                 <!-- Gelbe Ampel -->
-                <Ellipse Width="30" Height="30" Fill="{Binding AmpelGelb}" Margin="10" RenderTransformOrigin="0.567,-0.167"/>
+                <Ellipse Width="15" Height="15" Fill="{Binding AmpelGelb}" Margin="-36,-45,10,10" RenderTransformOrigin="0.567,-0.167"/>
                 <!-- Grüne Ampel -->
-                <Ellipse Width="30" Height="30" Fill="{Binding AmpelGruen}" Margin="10"/>
+                <Ellipse Width="15" Height="15" Fill="{Binding AmpelGruen}" Margin="-5,-45,10,10"/>
             </StackPanel>
 
         </Grid>

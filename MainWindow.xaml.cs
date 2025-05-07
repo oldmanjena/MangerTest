@@ -9,6 +9,7 @@ using MangerTest.Training;
 using System.Windows;
 using MangerTest.Auswertungen;
 using MangerTest.Gewicht;
+using MangerTest.Versuche;
 
 namespace MangerTest;
 
@@ -119,6 +120,12 @@ public partial class MainWindow : Window
     {
         KoerperdatenView koerperdaten = new KoerperdatenView();
         koerperdaten.Show();
+    }
+
+    private void Versuche_Click(object sender, RoutedEventArgs e)
+    {
+        VersucheControl versuche = new VersucheControl();
+        versuche.Show();
     }
 }
 

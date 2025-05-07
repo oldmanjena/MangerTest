@@ -19,7 +19,7 @@
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/icons/gesund.png" Width="16" Height="16"/>
                     </MenuItem.Icon>
-                    <MenuItem Header="Messwerte Blutdruck"/>
+                    <MenuItem Header="Versuche" Click="Versuche_Click"/>
                     <MenuItem Header="Morgens"/>
                     <MenuItem Header="Abends"/>
                 </MenuItem>
