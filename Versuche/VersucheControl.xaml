@@ -12,6 +12,8 @@
         <TextBlock x:Name="textBlock" Margin="28,30,0,0" TextWrapping="Wrap" Text="Versuch Time" VerticalAlignment="Top"/>
         <TextBlock x:Name="textBlock1" Margin="28,115,0,0" TextWrapping="Wrap" Text="ValueUpDown" VerticalAlignment="Top"/>
         <xctk:ValueRangeTextBox x:Name="textBox1" HorizontalAlignment="Left" Margin="28,142,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <xctk:DateTimeUpDown Format="Custom" FormatString="hh:mm tt" Value="13:30" Width="100" Margin="269,52,431,315" />
+        <xctk:Calculator  Width="300" Margin="400,57,100,62"/>
 
     </Grid>
 </Window>

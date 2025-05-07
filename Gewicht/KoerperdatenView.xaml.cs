@@ -41,5 +41,20 @@ namespace MangerTest.Gewicht
                 e.Handled = true;
             }
         }
+
+        private void OnFinishButtonClicked(object sender, RoutedEventArgs e)
+        {
+            // Daten aus dem ViewModel speichern
+            if (DataContext is KoerperdatenViewModel vm)
+            {
+                if (vm.SpeichernCommand.CanExecute(null))
+                {
+                    vm.SpeichernCommand.Execute(null);
+                }
+            }
+
+            // Optional: Fenster schließen nach Abschluss
+            this.Close(); // Dies schließt das Fenster, nachdem der Button geklickt wurde
+        }
     }
 }

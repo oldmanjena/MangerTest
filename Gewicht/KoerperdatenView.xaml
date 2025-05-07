@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:MangerTest.Gewicht"
         xmlns:conv="clr-namespace:MangerTest.Converter"
         xmlns:vm="clr-namespace:MangerTest.ViewModel" 
-        mc:Ignorable="d"        
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"       
         
         Title="Körperdaten" Height="800" Width="500"
         Style="{StaticResource {x:Type Window}}">
@@ -14,154 +15,105 @@
     <Window.Resources>
         <conv:MaskedTextToDecimalConverter x:Key="DecimalConverter" />
         <conv:DrawingBrushToMediaBrushConverter x:Key="DrawingBrushToMediaBrushConverter" />
+      
     </Window.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <!-- 22 Zeilen -->
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="100"/>
-
-            </Grid.ColumnDefinitions>
-
-            <!-- Feld 1 -->
-            <TextBlock Text="Gewicht" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Gewicht}" 
-                     Grid.Row="0" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="BMI" Grid.Row="1" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding BMI}" 
-                     Grid.Row="1" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Körperfett" Grid.Row="2" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Koerperfett}" 
-                     Grid.Row="2" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Fettmasse" Grid.Row="3" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Fettmasse}" 
-                     Grid.Row="3" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Fettfreies Körpergewicht" Grid.Row="4" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding FettfreiesKoerpergewicht}" 
-                     Grid.Row="4" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Muskelmasse" Grid.Row="5" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Muskelmasse}" 
-                     Grid.Row="5" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Muskelfrequenz" Grid.Row="6" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Muskelfrequenz}" 
-                     Grid.Row="6" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Skelettmuskulatur %" Grid.Row="7" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Skelettmuskulatur}"
-                     Grid.Row="7" Grid.Column="1"
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Knochenmasse" Grid.Row="8" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Knochenmasse}" 
-                     Grid.Row="8" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Eiweißmenge" Grid.Row="9" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Eiweissmenge}" 
-                     Grid.Row="9" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Proteine" Grid.Row="10" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Proteine}" 
-                     Grid.Row="10" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Wassergehalt" Grid.Row="11" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Wassergehalt}" 
-                     Grid.Row="11" Grid.Column="1"
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Körperwasser %" Grid.Row="12" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Koerperwasser}" 
-                     Grid.Row="12" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Unterhautfettgewebe" Grid.Row="13" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding Unterhautfettgewebe}" 
-                     Grid.Row="13" Grid.Column="1"
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="Viszerales Fett" Grid.Row="14" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding ViszeralesFett, Converter={StaticResource DecimalConverter}, UpdateSourceTrigger=PropertyChanged}" 
-                     Grid.Row="14" Grid.Column="1" 
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
-
-            <TextBlock Text="BMR" Grid.Row="15" HorizontalAlignment="Center" Height="20" Width="100"/>
-            <TextBox Text="{Binding BMR}" 
-                     Grid.Row="15" Grid.Column="1"
-                     KeyDown="Control_KeyDown"
-                     Margin="5,5,5,5"/>
+    <xctk:Wizard x:Name="KoerperdatenWizard" 
+             FinishButtonClosesWindow="False">     
 
 
-            <Button x:Name="btnSpeichern" 
-                    Grid.Row="0" Grid.Column="4" Content="Speichern" 
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Center" Width="80" 
-                    Command="{Binding SpeichernCommand, PresentationTraceSources.TraceLevel=High}"
-                    Cursor="Arrow" Height="35" Margin="20,0,0,0"/>
+        <!-- Seite 1: Basiswerte -->
+        <xctk:WizardPage Title="Basiswerte">
+            <StackPanel>
+                <TextBlock Text="Gewicht (kg)" />
+                <xctk:DoubleUpDown Value="{Binding Gewicht}" Width="120" Margin="0,5"/>
 
-            <StackPanel Grid.Column="2" Grid.Row="14" Grid.RowSpan="2"
-            Margin="-12,-35,76,0" Height="35" VerticalAlignment="Center" Grid.ColumnSpan="2" Width="95">
-                <!-- Rote Ampel -->
-                <Ellipse Width="15" Height="15" Fill="{Binding AmpelRot}"  Margin="-60,12,10,20" RenderTransformOrigin="-3.55,1.1"/>
-                <!-- Gelbe Ampel -->
-                <Ellipse Width="15" Height="15" Fill="{Binding AmpelGelb}" Margin="-36,-45,10,10" RenderTransformOrigin="0.567,-0.167"/>
-                <!-- Grüne Ampel -->
-                <Ellipse Width="15" Height="15" Fill="{Binding AmpelGruen}" Margin="-5,-45,10,10"/>
+                <TextBlock Text="BMI" />
+                <xctk:DoubleUpDown Value="{Binding BMI}" Width="120" Margin="0,5"/>
             </StackPanel>
+        </xctk:WizardPage>
 
-        </Grid>
-    </ScrollViewer>
+        <!-- Seite 2: Fettverteilung -->
+        <xctk:WizardPage Title="Fettverteilung">
+            <StackPanel>
+                <TextBlock Text="Körperfett (%)" />
+                <xctk:DoubleUpDown Value="{Binding Koerperfett}" Width="120" Margin="0,5"/>
+
+                <TextBlock Text="Fettmasse (kg)" />
+                <xctk:DoubleUpDown Value="{Binding Fettmasse}" Width="120" Margin="0,5"/>
+
+                <TextBlock Text="Fettfreies Körpergewicht" />
+                <xctk:DoubleUpDown Value="{Binding FettfreiesKoerpergewicht}" Width="120" Margin="0,5"/>
+            </StackPanel>
+        </xctk:WizardPage>
+
+        <!-- Seite 3: Muskelmasse -->
+        <xctk:WizardPage Title="Muskelmasse">
+            <StackPanel>
+                <TextBlock Text="Muskelmasse" />
+                <xctk:DoubleUpDown Value="{Binding Muskelmasse}" Width="120" Margin="0,5"/>
+
+                <TextBlock Text="Muskelfrequenz" />
+                <xctk:DoubleUpDown Value="{Binding Muskelfrequenz}" Width="120" Margin="0,5"/>
+
+                <TextBlock Text="Skelettmuskulatur (%)" />
+                <xctk:DoubleUpDown Value="{Binding Skelettmuskulatur}" Width="120" Margin="0,5"/>
+            </StackPanel>
+        </xctk:WizardPage>
+
+        <!-- Seite 4: Körperstruktur -->
+        <xctk:WizardPage Title="Körperstruktur">
+            <StackPanel>
+                <TextBlock Text="Knochenmasse" />
+                <xctk:DoubleUpDown Value="{Binding Knochenmasse}" Width="120" Margin="0,5"/>
+
+                <TextBlock Text="Eiweißmenge" />
+                <xctk:DoubleUpDown Value="{Binding Eiweissmenge}" Width="120" Margin="0,5"/>
+
+                <TextBlock Text="Proteine" />
+                <xctk:DoubleUpDown Value="{Binding Proteine}" Width="120" Margin="0,5"/>
+            </StackPanel>
+        </xctk:WizardPage>
+
+        <!-- Seite 5: Wasserhaushalt -->
+        <xctk:WizardPage Title="Wasserhaushalt">
+            <StackPanel>
+                <TextBlock Text="Wassergehalt" />
+                <xctk:DoubleUpDown Value="{Binding Wassergehalt}" Width="120" Margin="0,5"/>
+
+                <TextBlock Text="Körperwasser (%)" />
+                <xctk:DoubleUpDown Value="{Binding Koerperwasser}" Width="120" Margin="0,5"/>
+            </StackPanel>
+        </xctk:WizardPage>
+
+        <!-- Seite 6: Fettverteilung Details -->
+        <xctk:WizardPage Title="Fettverteilung Details">
+            <StackPanel>
+                <TextBlock Text="Unterhautfettgewebe" />
+                <xctk:DoubleUpDown Value="{Binding Unterhautfettgewebe}" Width="120" Margin="0,5"/>
+
+                <TextBlock Text="Viszerales Fett" />
+                <xctk:DoubleUpDown Value="{Binding ViszeralesFett}" Width="120" Margin="0,5"/>
+            </StackPanel>
+        </xctk:WizardPage>
+
+        <!-- Seite 7: Metabolismus -->
+        <xctk:WizardPage Title="Metabolismus">
+            <StackPanel>
+                <TextBlock Text="BMR" />
+                <xctk:DoubleUpDown Value="{Binding BMR}" Width="120" Margin="0,5"/>
+            </StackPanel>
+        </xctk:WizardPage>
+
+        <!-- Seite 8: Abschluss -->
+        <xctk:WizardPage Title="Fertigstellen">
+            <StackPanel>
+                <TextBlock Text="Alle Daten sind eingegeben. Klicke auf Speichern, um die Werte zu übernehmen." Margin="0,0,0,10"/>
+                <Button Content="Speichern" Command="{Binding SpeichernCommand}" Click="OnFinishButtonClicked" Width="150" Height="35" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </xctk:WizardPage>
+
+    </xctk:Wizard>
+
+
 </Window>
